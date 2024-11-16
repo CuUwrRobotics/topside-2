@@ -4,18 +4,10 @@
 #include <string.h>
 #include <sys/utsname.h>
 #include <unistd.h>
+#include <bindings.h>
 
-struct AxisData {
-    float x;
-    float y;
-    float z;
-};
-
-struct ADCData {
-    float channel[4];
-};
-
-struct NavigatorData {
+/* struct NavigatorData
+{
     bool led_status;
     float temperature;
     float pressure;
@@ -26,7 +18,8 @@ struct NavigatorData {
     AxisData gyro;
 };
 
-NavigatorData get_navigator_data(){
+NavigatorData get_navigator_data()
+{
     init();
     NavigatorData data;
     data.led_status = get_led_status();
@@ -40,16 +33,20 @@ NavigatorData get_navigator_data(){
     return data;
 }
 
-void send_navigator_data(NavigatorData data){
+void send_navigator_data(NavigatorData data)
+{
     zmq::context_t context(1);
     zmq::socket_t socket(context, ZMQ_PUSH);
     socket.connect("tcp://localhost:5555");
     zmq::message_t message(sizeof(NavigatorData));
     memcpy(message.data(), &data, sizeof(NavigatorData));
     socket.send(message);
-}
+} */
 
-int main(){
-    NavigatorData data = get_navigator_data();
-    send_navigator_data(data);
+int main()
+{
+    /*     NavigatorData data = get_navigator_data();
+        send_navigator_data(data); */
+
+    get_led(UserLed::Led1);
 }
