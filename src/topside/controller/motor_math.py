@@ -92,12 +92,18 @@ def get_joystick_input():
 
 
 def get_coefficients(goal_vec):
-    # ms is a list of all motor vectors
-    ms = [m1, m2, m3, m4, m5, m6]
-    M = np.hstack(ms)  # Combine all motor vectors into a matrix
-    c = np.linalg.lstsq(M, goal_vec, rcond=None)[0]  # Solve for coefficients
+    # # ms is a list of all motor vectors
+    # ms = [m1, m2, m3, m4, m5, m6]
+    # M = np.hstack(ms)  # Combine all motor vectors into a matrix
+    # c = np.linalg.lstsq(M, goal_vec, rcond=None)[0]  # Solve for coefficients
+    # return c
+    c1, c2, c3, c4, c5, c6 = np.zeros(6)
+    C = [c1, c2, c3, c4 , c5, c6]
+    M = np.hstack([m1, m2, m3, m4, m5, m6])
+    j = np.dot(M, C)
+    M_inv = np.linalg.pinv(M)
+    c = np.dot(M_inv, goal_vec)
     return c
-
 
 def create_goal_vec(s1, s2):
     # Initialize goal vector
@@ -152,12 +158,15 @@ def print_robot_orientation(goal_vec):
 
 
 if __name__ == "__main__":
-    joystick = setup_controller()  # Initialize joystick
-    while True:
-        s1, s2 = get_joystick_input()  # Get joystick inputs
-        goal_vec = create_goal_vec(s1, s2)  # Generate goal vector based on inputs
-        print_robot_orientation(goal_vec)  # Output robot's orientation
-        c = get_coefficients(goal_vec)  # Calculate motor coefficients
-        print("Motor coefficients:", c)  # Print motor coefficients
+    # joystick = setup_controller()  # Initialize joystick
+    # while True:
+    #     s1, s2 = get_joystick_input()  # Get joystick inputs
+    #     goal_vec = create_goal_vec(s1, s2)  # Generate goal vector based on inputs
+    #     print_robot_orientation(goal_vec)  # Output robot's orientation
+    #     c = get_coefficients(goal_vec)  # Calculate motor coefficients
+    #     print("Motor coefficients:", c)  # Print motor coefficients
 
-        pygame.time.wait(100)  # Small delay to prevent rapid looping
+    #     pygame.time.wait(100)  # Small delay to prevent rapid looping
+    print(get_coefficients([1, 1, 1]))
+
+    
