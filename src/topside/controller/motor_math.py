@@ -12,25 +12,25 @@ theta3 = np.radians(0)
 m1 = np.array([
     [np.sin(theta3) * np.cos(theta1)],
     [np.sin(theta3) * np.sin(theta2)],
-    [-np.cos(theta3)]
+    [0]
 ])  # bottom right
 
 m2 = np.array([
     [np.sin(theta3) * np.cos(theta1)],
     [np.sin(theta3) * np.sin(theta2)],
-    [-np.cos(theta3)]
+    [0]
 ])  # bottom left
 
 m3 = np.array([
     [-np.sin(theta3) * np.cos(theta1)],
     [np.sin(theta3) * np.sin(theta2)],
-    [-np.cos(theta3)]
+    [0]
 ])  # top left
 
 m4 = np.array([
     [np.sin(theta3) * np.cos(theta1)],
     [np.sin(theta3) * np.sin(theta2)],
-    [-np.cos(theta3)]
+    [0]
 ])  # top right
 m5 = np.array([
     [0],
@@ -99,9 +99,14 @@ def get_coefficients(goal_vec):
     # return c
     c1, c2, c3, c4, c5, c6 = np.zeros(6)
     C = [c1, c2, c3, c4 , c5, c6]
+    print(C)
     M = np.hstack([m1, m2, m3, m4, m5, m6])
+    print(M)
     j = np.dot(M, C)
     M_inv = np.linalg.pinv(M)
+
+    print(M_inv)
+
     c = np.dot(M_inv, goal_vec)
     return c
 
@@ -111,25 +116,13 @@ def create_goal_vec(s1, s2):
 
     # Handle joystick 1 (s1) - up, down, rotate right, rotate left
     up, down, rotate_right, rotate_left, *_ = s1
-    if up: 
-        goal_vec[1] += 1
-    if down:
-        goal_vec[1] -= 1
-    if rotate_right:
-        goal_vec[2] += 1
-    if rotate_left:
-        goal_vec[2] -= 1
+    goal_vec[1] += up - down
+    goal_vec[2] += rotate_right - rotate_left
 
     # Handle joystick 2 (s2) - forward, backward, strafe right, strafe left
     forward, backward, strafe_right, strafe_left, *_ = s2
-    if forward:
-        goal_vec[2] += 1
-    if backward:
-        goal_vec[2] -= 1
-    if strafe_right:
-        goal_vec[0] += 1
-    if strafe_left:
-        goal_vec[0] -= 1
+    goal_vec[0] += strafe_right - strafe_left
+    goal_vec[2] += forward - backward
 
     # Normalize goal vector if necessary
     if np.linalg.norm(goal_vec) > 0:
@@ -156,17 +149,18 @@ def print_robot_orientation(goal_vec):
     else:
         print("Robot is stationary")
 
+generatePWM(get_coefficients(create_goal_vec(get_joystick_input()))):
 
 if __name__ == "__main__":
-    # joystick = setup_controller()  # Initialize joystick
-    # while True:
-    #     s1, s2 = get_joystick_input()  # Get joystick inputs
-    #     goal_vec = create_goal_vec(s1, s2)  # Generate goal vector based on inputs
-    #     print_robot_orientation(goal_vec)  # Output robot's orientation
-    #     c = get_coefficients(goal_vec)  # Calculate motor coefficients
-    #     print("Motor coefficients:", c)  # Print motor coefficients
+    joystick = setup_controller()  # Initialize joystick
+    while True:
+        s1, s2 = get_joystick_input()  # Get joystick inputs
+        goal_vec = create_goal_vec(s1, s2)  # Generate goal vector based on inputs
+        print_robot_orientation(goal_vec)  # Output robot's orientation
+        c = get_coefficients(goal_vec)  # Calculate motor coefficients
+        print("Motor coefficients:", c)  # Print motor coefficients
 
-    #     pygame.time.wait(100)  # Small delay to prevent rapid looping
-    print(get_coefficients([1, 1, 1]))
-
+        pygame.time.wait(100)  # Small delay to prevent rapid looping
+   
+    pygame.quit()  # Quit pygame
     
