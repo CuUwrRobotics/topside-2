@@ -2,7 +2,7 @@ import numpy as np
 import pygame
 from pygame import joystick
 import sys
-
+import zmq
 # Constants for initial angles
 theta1 = np.radians(45)
 theta2 = np.radians(45)
@@ -108,7 +108,9 @@ def get_coefficients(goal_vec):
     print(M_inv)
 
     c = np.dot(M_inv, goal_vec)
-    return c
+    # return array as 32 bit bytes 
+    return c.astype(np.float32).tobytes()
+    # return c
 
 def create_goal_vec(s1, s2):
     # Initialize goal vector
@@ -149,18 +151,20 @@ def print_robot_orientation(goal_vec):
     else:
         print("Robot is stationary")
 
-generatePWM(get_coefficients(create_goal_vec(get_joystick_input()))):
-
 if __name__ == "__main__":
     joystick = setup_controller()  # Initialize joystick
+    context = zmq.Context()  
+    socket = context.socket(zmq.PUB)
+    socket.bind("tcp://*:5555")
+
+    prev_coefficients = [0, 0, 0, 0, 0, 0]
     while True:
         s1, s2 = get_joystick_input()  # Get joystick inputs
         goal_vec = create_goal_vec(s1, s2)  # Generate goal vector based on inputs
         print_robot_orientation(goal_vec)  # Output robot's orientation
         c = get_coefficients(goal_vec)  # Calculate motor coefficients
-        print("Motor coefficients:", c)  # Print motor coefficients
-
-        pygame.time.wait(100)  # Small delay to prevent rapid looping
-   
+        if c != prev_coefficients:
+            socket.send(c)
+            # print(c)
     pygame.quit()  # Quit pygame
     
