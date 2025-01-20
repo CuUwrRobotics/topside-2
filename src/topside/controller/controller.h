@@ -1,3 +1,6 @@
+/** 
+ * 
+ */
 #pragma once
 
 #include <libusb-1.0/libusb.h>
@@ -5,6 +8,7 @@
 #include <vector>
 #include <bitset>
 #include <map>
+#include <cmath>
 #include <sstream>
 #include <iomanip>
 #include <string>
@@ -27,10 +31,10 @@ public:
     bool init();              /* Initialize connection */
     bool term();              /* Terminate connection */
     bool read_input();        /* Read in raw controller data */
-    void print_joysticks() const;
-    void print_buttons() const;
-    void parse_input(const vector<unsigned char>& data);
-    
+    void get_joysticks(float* coords) const;
+    void get_buttons() const;
+    void parse_input();
+    void setup(){findDevice();}
 
 private:
     libusb_context *ctx;

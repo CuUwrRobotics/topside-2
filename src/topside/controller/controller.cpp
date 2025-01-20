@@ -1,4 +1,4 @@
-#include "controller_parser.h"
+#include "controller.h"
 #include <iostream>
 
 using namespace std;
@@ -101,7 +101,7 @@ bool Controller::read_input()
     if (event_occurred)
     {
         // print_state();
-        parse_input(input_data);
+        parse_input();
     }
 
     prev_input_data = input_data;
@@ -109,22 +109,22 @@ bool Controller::read_input()
     return true;
 }
 
-void Controller::print_joysticks() const
+void Controller::get_joysticks(float* coords) const
 {
-    /* Joysticks */
+    // Constants for normalization
+    const float JOY_MIN = -32767.0f;
+    const float JOY_MAX = 32767.0f;
 
-    /* Left Joy */
-    // x axis is byte 6 & 7
+    // Left joystick
     uint8_t left_joy_x1 = input_data[6];
     uint8_t left_joy_x2 = input_data[7];
-
     uint8_t left_joy_y1 = input_data[8];
     uint8_t left_joy_y2 = input_data[9];
 
     int16_t left_joy_x = (left_joy_x2 << 8) | left_joy_x1;
     int16_t left_joy_y = (left_joy_y2 << 8) | left_joy_y1;
 
-    /* Right Joy */
+    // Right joystick
     uint8_t right_joy_x1 = input_data[10];
     uint8_t right_joy_x2 = input_data[11];
     uint8_t right_joy_y1 = input_data[12];
@@ -132,20 +132,19 @@ void Controller::print_joysticks() const
 
     int16_t right_joy_x = (right_joy_x2 << 8) | right_joy_x1;
     int16_t right_joy_y = (right_joy_y2 << 8) | right_joy_y1;
-     
-    float lj_x_normed = -1.0f + ((left_joy_x - (-32767.0)) * (1-(-1)) / (32767.0 - -32767.0));
-    float lj_y_normed = -1.0f + ((left_joy_y - (-32767.0)) * (1-(-1)) / (32767.0 - -32767.0));
 
+    // Normalize joystick values to range [-1, 1]
+    coords[0] = (left_joy_x - JOY_MIN) / (JOY_MAX - JOY_MIN) * 2.0f - 1.0f; // Left joystick X
+    coords[1] = (left_joy_y - JOY_MIN) / (JOY_MAX - JOY_MIN) * 2.0f - 1.0f; // Left joystick Y
+    coords[2] = (right_joy_x - JOY_MIN) / (JOY_MAX - JOY_MIN) * 2.0f - 1.0f; // Right joystick X
+    coords[3] = (right_joy_y - JOY_MIN) / (JOY_MAX - JOY_MIN) * 2.0f - 1.0f; // Right joystick Y
 
-    float rj_x_normed = -1.0f + ((right_joy_x - (-32767.0)) * (1-(-1)) / (32767.0 - -32767.0));
-    float rj_y_normed = -1.0f + ((right_joy_y - (-32767.0)) * (1-(-1)) / (32767.0 - -32767.0));
-
-    cout << "(" << (float)rj_x_normed << ", " << (float)rj_y_normed << ")" << endl;
-    cout << "(" << (float)lj_x_normed << ", " << (float)lj_y_normed << ")" << endl;
+    // cout << "(" << (float)rj_x_normed << ", " << (float)rj_y_normed << ")" << endl;
+    // cout << "(" << (float)lj_x_normed << ", " << (float)lj_y_normed << ")" << endl;
 
 }
 
-void Controller::print_buttons() const
+void Controller::get_buttons() const
 {
     uint8_t byte3 = input_data[2];
     uint8_t byte4 = input_data[3];
@@ -277,33 +276,37 @@ void Controller::print_buttons() const
     }
 }
 
-void Controller::parse_input(const vector<unsigned char> &data)
+
+
+void Controller::parse_input()
 {
-    print_joysticks();
-    print_buttons();
+    float coords[4];
+    get_joysticks(coords);
+    get_buttons();
     // print_state();
 }
 
-int main()
-{
-    Controller c(0x046d, 0xc21d); // F310 vendor id and product id
 
-    if (c.init())
-    {
+// int main()
+// {
+//     Controller c(0x046d, 0xc21d); // F310 vendor id and product id
 
-        while (true)
-        {
-            if (!c.read_input())
-            {
-                break;
-            }
-        }
-        c.term();
-    }
-    else
-    {
-        cerr << "Failed to initialize controller." << endl;
-    }
+//     if (c.init())
+//     {
 
-    return 0;
-}
+//         while (true)
+//         {
+//             if (!c.read_input())
+//             {
+//                 break;
+//             }
+//         }
+//         c.term();
+//     }
+//     else
+//     {
+//         cerr << "Failed to initialize controller." << endl;
+//     }
+
+//     return 0;
+// }
