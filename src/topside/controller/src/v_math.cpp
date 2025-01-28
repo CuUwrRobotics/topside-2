@@ -6,24 +6,24 @@
  * Last Modified: 01.17.24
  *******************************************/
 
-#include "v_math.h"
+#include <controller/v_math.hpp>
 #include <iostream>
 #include <iomanip>
 #include <cmath>
 #include <cassert>
-using namespace std;
+#include <cstddef>
 
 float v_math::dot(float *a, float *b, int size)
 {
     float sum = 0;
-    for (int i = 0; i < size; i++)
+    for (std::size_t idx = 0; idx < size; idx++)
     {
-        sum += a[i] * b[i];
+        sum += a[idx] * b[idx];
     }
     return sum;
 }
 
-void v_math::inv(float* M, float* M_inv, int N)
+void v_math::inv(float *M, float *M_inv, int N)
 {
     float *augmented = new float[N * N * 2];
     for (int i = 0; i < N; ++i)

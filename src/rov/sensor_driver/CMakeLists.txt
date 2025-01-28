@@ -1,19 +1,8 @@
-cmake_minimum_required(VERSION 3.11)
-project(sensor_driver)
-set(CMAKE_CXX_STANDARD 23)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+add_executable(sensor_driver)
 
-include(FetchContent)
-FetchContent_Declare(
-    cppzmq
-    GIT_REPOSITORY https://github.com/zeromq/cppzmq.git
-    GIT_TAG        master
-)
-
-FetchContent_MakeAvailable(cppzmq)
-
-add_executable(sensor_driver 
-    sensor_driver.cpp
+target_sources(sensor_driver
+PRIVATE
+    src/sensor_driver.cpp
 )
 
 target_link_libraries(sensor_driver
@@ -24,5 +13,5 @@ PRIVATE
 
 target_include_directories(sensor_driver 
 PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}
+    ./include
 )

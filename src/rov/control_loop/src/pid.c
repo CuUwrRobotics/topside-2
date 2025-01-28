@@ -1,4 +1,4 @@
-#include "pid.h"
+#include <control_loop/pid.h>
 
 /* Constructor for PID*/
 void pid_init(struct PID *pid, float Kp, float Ki, float Kd, float Kaw, float T_C, float T, float max, float min, float max_rate)
@@ -22,7 +22,7 @@ void pid_init(struct PID *pid, float Kp, float Ki, float Kd, float Kaw, float T_
 /* PID_Step represents 1 step (every 100ms)*/
 float PID_Step(struct PID *pid, float measurement, float setpoint)
 {
-    float err; 
+    float err;
     float cmd;
     float cmd_sat;
     float deriv_fltr;
@@ -31,14 +31,14 @@ float PID_Step(struct PID *pid, float measurement, float setpoint)
     err = setpoint - measurement;
 
     /* Integral calculation */
-    pid -> integral += pid -> Ki * pid -> T * err;
+    pid->integral += pid->Ki * pid->T * err;
     /* Derivative Calc */
-    deriv_fltr = (2 * pid -> T_C - pid -> T) / (2 * pid -> T_C + pid -> T);
+    deriv_fltr = (2 * pid->T_C - pid->T) / (2 * pid->T_C + pid->T);
     pid->err_prev = err;
     pid->deriv_prev = deriv_fltr;
 
     /* Sum the terms */
-    cmd = pid-> Kp * err + pid->integral - pid->Kd * deriv_fltr;
+    cmd = pid->Kp * err + pid->integral - pid->Kd * deriv_fltr;
 
     /* Saturate Command */
     if (cmd > pid->max)
@@ -67,6 +67,6 @@ float PID_Step(struct PID *pid, float measurement, float setpoint)
     {
         /* Nothing happened and the lord did grin*/
     }
-    pid -> command_sat_prev = cmd_sat;
+    pid->command_sat_prev = cmd_sat;
     return cmd_sat;
 }

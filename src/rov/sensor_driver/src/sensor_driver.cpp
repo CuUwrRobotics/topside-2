@@ -45,8 +45,11 @@ void send_navigator_data(NavigatorData data)
 
 int main()
 {
-    /*     NavigatorData data = get_navigator_data();
-        send_navigator_data(data); */
+    /*
+    NavigatorData data = get_navigator_data();
+    send_navigator_data(data);
+    */
 
+    init();
     get_led(UserLed::Led1);
 }

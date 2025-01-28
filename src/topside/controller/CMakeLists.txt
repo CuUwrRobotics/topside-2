@@ -1,39 +1,19 @@
-cmake_minimum_required(VERSION 3.11)
-project(topside)
+add_executable(controller)
 
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+target_sources(controller
+PRIVATE
+    src/main.cpp
+    src/controller.cpp
+    src/v_math.cpp
+    src/controls_interpreter.cpp
+)
 
-# add_subdirectory(controller)
+target_link_libraries(controller
+PRIVATE
+    usb-1.0
+)
 
-# Set the pkg-config path for libusb
-set(PKG_CONFIG_PATH "/opt/homebrew/Cellar/libusb/1.0.27/lib/pkgconfig")
-
-# Use pkg-config to find libusb
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(LIBUSB REQUIRED libusb-1.0)
-
-# Include libusb headers
-include_directories(${LIBUSB_INCLUDE_DIRS})
-include_directories("/opt/homebrew/Cellar/libusb/1.0.27/include")
-
-# Add the directory containing libusb-1.0 library
-link_directories("/opt/homebrew/Cellar/libusb/1.0.27/lib")
-
-# Add the executable
-add_executable(controller 
-            main.cpp
-            controller.h 
-            controller.cpp
-            v_math.h 
-            v_math.cpp 
-            controls_interpreter.h
-            controls_interpreter.cpp
-        )
-
-
-# Link to the found libusb library
-target_link_libraries(controller PRIVATE ${LIBUSB_LIBRARIES})
-
-# Include the current directory for header files
-target_include_directories(controller PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(controller 
+PRIVATE 
+    ./include
+)
