@@ -3,3 +3,4 @@ install
 build
 CMakeFiles
 .vscode
+.DS_Store
