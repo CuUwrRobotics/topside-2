@@ -5,5 +5,7 @@ project(underwater_robotics
     DESCRIPTION "Topside and ROV software"
 )
 
+include(cmake/fetch_deps.cmake)
+
 add_subdirectory(src)
 add_subdirectory(lib)
