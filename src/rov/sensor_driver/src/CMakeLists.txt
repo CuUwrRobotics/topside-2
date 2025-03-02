@@ -8,7 +8,7 @@ PRIVATE
 target_link_libraries(sensor_driver
 PRIVATE
     cppzmq
-    navigator-lib-obj
+    navigator-lib
 )
 
 target_include_directories(sensor_driver 
