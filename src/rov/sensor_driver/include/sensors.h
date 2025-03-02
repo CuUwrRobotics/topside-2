@@ -18,4 +18,4 @@ struct sensor_data {
     float a_roll;
 };
 
-struct snesor_data *read_sensors();
+struct sensor_data *read_sensors();
