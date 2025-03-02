@@ -1,6 +1,3 @@
-include(ExternalProject)
-
-set_directory_properties(PROPERTIES EP_PREFIX ${CMAKE_BINARY_DIR}/Rust)
 set(RUST_PROJ_DIR "${CMAKE_CURRENT_SOURCE_DIR}/navigator-lib")
 set(RUST_OUT_DIR "${RUST_PROJ_DIR}/target/debug")
 
