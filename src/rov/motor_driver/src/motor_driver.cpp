@@ -3,17 +3,17 @@
 
 #include <thread>
 
-void bytes_to_pwm(float &coeffs[6])
+void bytes_to_pwm(float coeffs[6])
 {
     for (int i = 0; i < 6; i++)
     {
         coeffs[i] = coeffs[i] * 255;
     }
 }
-void recieve_coefficients(float &coeffs[6])
+void recieve_coefficients(float coeffs[6], zmq::socket_t &socket)
 {
     zmq::message_t message;
-    receiver.recv(&message);
+    socket.recv(&message);
     // break the message into 6 floats
     float *data = (float *)message.data();
     for (int i = 0; i < 6; i++)
@@ -26,7 +26,7 @@ void drive_motors(float pwms[6])
 {
     for (int i = 0; i < 6; i++)
     {
-        set_pwm(static_cast<PwmChannel>(i + 1), pwms[i]);
+        set_pwm_channel_value(i + 1, pwms[i]);
     }
 }
 
@@ -42,7 +42,7 @@ int main()
     float pwms[6];
     while (true)
     {
-        recieve_coefficients(coeffs);
+        recieve_coefficients(coeffs, receiver);
         bytes_to_pwm(coeffs);
         drive_motors(pwms);
     }

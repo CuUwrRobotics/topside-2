@@ -3,5 +3,6 @@
         "vector": "cpp",
         "iostream": "cpp",
         "ostream": "cpp"
-    }
+    },
+    "editor.fontLigatures": false
 }
