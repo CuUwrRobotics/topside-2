@@ -13,33 +13,36 @@ def build_topside() -> bool:
 
     logging.info("[Topside] Building navigator-lib")
     cargo = subprocess.run(["cargo", "build"], capture_output=True)
-    logging.info("[Topside] Successfully built navigator-lib!")
 
     if (cargo.returncode != os.EX_OK):
         logging.error("[Topside] Failed to build navigator-lib")
         print(cargo.stderr)
         return False
+    
+    logging.info("[Topside] Successfully built navigator-lib!")
 
     logging.info(f"[Topside] Setting working dir to {currentDirectory}")
     os.chdir(currentDirectory)
 
     logging.info("[Topside] Configuring CMake build for topside")
     cmake_configure = subprocess.run(["cmake", "-B", "build", "-G", "Ninja"], capture_output=True)
-    logging.info("[Topside] Successfully configured CMake!")
 
     if (cmake_configure.returncode != os.EX_OK):
         logging.error("[Topside] Failed to configure CMake")
         print(cmake_configure.stderr)
         return False
+    
+    logging.info("[Topside] Successfully configured CMake!")
 
     logging.info("[Topside] Building CMake target: topside")
     cmake_build = subprocess.run(["cmake", "--build", "build", "--target", "topside"], capture_output=True)
-    logging.info("[Topside] Successfully built target: topside!")
 
     if (cmake_build.returncode != os.EX_OK):
         logging.error("[Topside] Failed to build target: topside")
         print(cmake_build.stderr)
         return False
+    
+    logging.info("[Topside] Successfully built target: topside!")
 
     return True
 
