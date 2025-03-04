@@ -41,7 +41,7 @@ def build_topside() -> bool:
         logging.error("[Topside] Failed to build target: topside")
         print(cmake_build.stderr)
         return False
-    
+        
     logging.info("[Topside] Successfully built target: topside!")
 
     return True
