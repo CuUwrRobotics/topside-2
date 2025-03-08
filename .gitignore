@@ -4,3 +4,6 @@ build
 CMakeFiles
 .vscode
 .DS_Store
+*.cmake
+*.pc
+CMakeCache.txt
