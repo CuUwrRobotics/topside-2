@@ -2,5 +2,5 @@ log
 install
 build
 CMakeFiles
-.vscode
+.vscode/
 .DS_Store
