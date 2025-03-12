@@ -3,9 +3,8 @@ add_executable(controller)
 target_sources(controller
 PRIVATE
     main.cpp
-    controller.cpp
-    v_math.cpp
-    controls_interpreter.cpp
+    Controller.cpp
+    ControllerManager.cpp
 )
 
 target_link_libraries(controller
