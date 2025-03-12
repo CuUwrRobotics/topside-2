@@ -4,16 +4,14 @@
 #include <zmq.hpp>
 #include <stdlib.h>
 
-float previous_time = 0;
+std::chrono::high_resolution_clock::time_point prev_time{};
 float get_delta_t()
 {
-    struct timeval tv;
-    gettimeofday(&tv, NULL);
-    if(previous_time == 0) return 0;
-    float current = tv.tv_sec + (tv.tv_usec / 1000000);
-    float delta = current - previous_time;
-    previous_time = current;
-    return delta;
+    std::chrono::high_resolution_clock::time_point current_time
+        = std::chrono::high_resolution_clock::now();
+    
+    if(prev_time.time_since_epoch().count() == 0) return 0; // i dont think this line works
+    return (std::chrono::duration_cast<std::chrono::milliseconds>(current_time - prev_time).count() / 1000.0);
 }
 
 zmq::context_t context{};
