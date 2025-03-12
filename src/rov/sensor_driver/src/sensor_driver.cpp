@@ -1,22 +1,6 @@
 #include <zmq.hpp>
-#include <stdint.h>
-#include <stdio.h>
-#include <string.h>
-#include <sys/utsname.h>
-#include <unistd.h>
 #include <bindings.h>
 #include <sensors.h>
-#include <stdlib.h>
-
-void send_navigator_data()
-{
-    zmq::context_t context{};
-    zmq::socket_t socket{context, ZMQ_PUSH};
-    socket.connect("tcp://localhost:5555");
-
-    struct sensor_data *data = read_sensors();
-    zmq::message_t message{data, sizeof(struct sensor_data)};
-}
 
 struct sensor_data *read_sensors()
 {
@@ -35,6 +19,16 @@ struct sensor_data *read_sensors()
     data->pressure = read_pressure();
 
     return data;
+}
+
+void send_navigator_data()
+{
+    zmq::context_t context{};
+    zmq::socket_t socket{context, ZMQ_PUSH};
+    socket.connect("tcp://localhost:5555");
+
+    struct sensor_data *data = read_sensors();
+    zmq::message_t message{data, sizeof(struct sensor_data)};
 }
 
 int main()
