@@ -69,7 +69,7 @@ Controller::Controller()
     }
 
     const auto& joystickFile = maybeControllerPath.value();
-    spdlog::info("Using controller with ID: {}",
+    spdlog::info("Found controller with known ID: {}",
                  joystickFile.filename().generic_string());
 
     spdlog::debug("Attempting to aquire handle to controller");
