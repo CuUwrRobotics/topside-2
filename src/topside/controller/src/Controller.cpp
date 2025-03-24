@@ -12,10 +12,11 @@
 #include <unistd.h>
 
 // Standard Library Includes
+#include <array>
 #include <cstdlib>
 #include <filesystem>
 #include <optional>
-#include <regex>
+#include <string_view>
 
 // Third Party Includes
 #include <spdlog/spdlog.h>
@@ -24,26 +25,35 @@ namespace cuuwr::topside::controller
 {
 Controller::Controller()
 {
-    const auto inputDirectory = std::filesystem::absolute("/dev/input");
-    const auto joystickRegex  = std::regex("/dev/input/js[0-9]");
+    const auto inputByID = std::filesystem::absolute("/dev/input/by-id");
+
+    //! For the current purposes, embedding the device IDs in the executable
+    //! works.
+    //! We may end up getting a new controller at some point and this
+    //! will no longer work. It might be worth creating a config file of sorts
+    //! that the controller ID can be loaded from at runtime.
+    using namespace std::string_view_literals;
+    constexpr std::array<std::string_view, 2> CONTROLLER_IDS
+        = { "usb-Logitech_Logitech_Dual_Action_9AA95248-event-joystick"sv,
+            "usb-Logitech_Logitech_Dual_Action_F240D0A4-event-joystick"sv };
 
     // I've been told that this is cursed ¯\_(ツ)_/¯
     // Initializes variable using an immediately invoked lambda expression
-    const auto maybeJoystickFile = [&]() -> std::optional<std::filesystem::path>
+    const auto maybeControllerPath
+        = [&]() -> std::optional<std::filesystem::path>
     {
-        spdlog::debug("Looking for attached controllers");
+        spdlog::debug("Looking for attached controllers with known IDs");
 
-        // Looks through all items in the /dev/input directory for a file named
-        // js followed by a number (i.e. js0) using the regex defined above
-        for (const auto file :
-             std::filesystem::directory_iterator(inputDirectory))
+        // Use controller IDs to get around having to identify each event* file
+        // in /dev/input. The by-id directory contains symlinks for attached
+        // devices that point to the correct event file
+        for (const auto currentID : CONTROLLER_IDS)
         {
-            spdlog::trace("Checking file ({}) against regex",
-                          file.path().string());
+            spdlog::trace("Checking controller ID: {}", currentID);
 
-            if (std::regex_match(file.path().string(), joystickRegex))
+            if (std::filesystem::exists(inputByID / currentID))
             {
-                return file.path();
+                return inputByID / currentID;
             }
         }
 
@@ -52,14 +62,15 @@ Controller::Controller()
     }();
 
     // If nullopt was returned, has_value() is false
-    if (!maybeJoystickFile.has_value())
+    if (!maybeControllerPath.has_value())
     {
-        spdlog::error("No controllers are connected!");
+        spdlog::error("No known controllers are connected!");
         std::exit(EXIT_FAILURE);
     }
 
-    const auto& joystickFile = maybeJoystickFile.value();
-    spdlog::info("Found controller at {}", joystickFile.c_str());
+    const auto& joystickFile = maybeControllerPath.value();
+    spdlog::info("Using controller with ID",
+                 joystickFile.filename().generic_string());
 
     spdlog::debug("Attempting to aquire handle to controller!");
     m_ControllerFileDescriptor

@@ -1,12 +1,17 @@
 // Standard Library Includes
 #include <cstdlib>
 
+// Third Party Includes
+#include <spdlog/cfg/env.h>
+
 // Project Includes
-#include <controller/ControllerManager.hpp>
+#include <controller/Controller.hpp>
 
 auto main() -> int
 {
-    cuuwr::topside::controller::ControllerManager controllerManager;
+    spdlog::cfg::load_env_levels();
+
+    cuuwr::topside::controller::Controller controllerManager;
 
     return EXIT_SUCCESS;
 }
