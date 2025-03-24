@@ -19,7 +19,10 @@ class Controller
 
     ~Controller();
 
-  private:
+  public:  // Methods
+    auto report_inputs() -> void;
+
+  private: // Members
     int m_ControllerFileDescriptor = -1;
 };
 } // namespace cuuwr::topside::controller
