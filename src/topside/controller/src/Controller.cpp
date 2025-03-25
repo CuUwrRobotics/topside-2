@@ -94,6 +94,11 @@ auto Controller::report_inputs() -> void
 
     while (::read(m_ControllerFileDescriptor, &inputEvent, sizeof(inputEvent)))
     {
+        if (inputEvent.type != EV_KEY)
+        {
+            continue;
+        }
+
         spdlog::info(R"({{"type": {}, "code": {}, "value": {}}})",
                      inputEvent.type,
                      inputEvent.code,
