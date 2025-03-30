@@ -6,7 +6,7 @@
 #include <unistd.h>
 #include <bindings.h>
 
-/* struct NavigatorData
+struct NavigatorData
 {
     bool led_status;
     float temperature;
@@ -32,7 +32,7 @@ NavigatorData get_navigator_data()
     data.gyro = get_gyro_data();
     return data;
 }
-
+/*
 void send_navigator_data(NavigatorData data)
 {
     zmq::context_t context(1);

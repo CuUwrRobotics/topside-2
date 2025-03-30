@@ -22,10 +22,8 @@ int main()
     PID pid_z(1.0f, 0.1f, 0.5f, 0.0f, 0.1f, 0.01f, 10.0f, -10.0f, 1.0f);
 
     // Create ROV object
-    float mass = 5.44f; // approx. Mass of the ROV in kg (~12lbs)
-    float damping = 0.1f; // Damping constant for water
-    float m = 5.44f;       // ROV mass
-    float k = 0.1f;       // Damping constant (TODO: Figure out what this is)
+    float m = 11.37f;       // ROV mass
+    float k = 0.1f;       // Damping constant (TODO: c= 2 * m * ζ * ω)
     float F_max = 0.0f;   // Maximum force
     float F_min = 0.0f;   // Minimum force
     float T = 0.01f;       // Time step
@@ -36,7 +34,7 @@ int main()
     float y = 0;       // Position in y
     float z = 0;       // Position in z
 
-    ROV_Object rov();
+    ROV_Object rov(m, k, F_max, F_min, T, v_x, v_y, v_z, x, y, z);
 
     // Set target velocities (setpoints)
     float setpoint_x = 1.0f; // Target velocity in x direction
