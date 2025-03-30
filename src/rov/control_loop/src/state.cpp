@@ -10,7 +10,7 @@ float get_delta_t()
     std::chrono::high_resolution_clock::time_point current_time
         = std::chrono::high_resolution_clock::now();
     
-    if(prev_time.time_since_epoch() == std::chrono::seconds::zero) return 0; // i dont think this line works
+    if(prev_time.time_since_epoch() == std::chrono::seconds::zero()) return 0; // this line maybe works
     return (std::chrono::duration_cast<std::chrono::milliseconds>(current_time - prev_time).count() / 1000.0);
 }
 
