@@ -31,6 +31,7 @@ void send_navigator_data()
     zmq::message_t message{data, sizeof(struct sensor_data)};
 }
 
+
 int main()
 {
     /*
@@ -41,3 +42,4 @@ int main()
     init();
     get_led(UserLed::Led1);
 }
+
