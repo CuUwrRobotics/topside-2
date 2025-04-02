@@ -13,7 +13,7 @@ auto main() -> int
 
     cuuwr::topside::controller::Controller controllerManager;
 
-    controllerManager.report_inputs();
+    controllerManager.dump_inputs_to_terminal();
 
     return EXIT_SUCCESS;
 }

@@ -4,25 +4,26 @@
  * @brief
  */
 
+// System Includes
+#include <sys/time.h>
+
 // Standard Library Includes
 #include <cstdint>
 
 namespace cuuwr::topside::controller
 {
-enum class JoystickEventType : std::uint8_t
+enum class InputEventType : std::uint16_t
 {
-    BUTTON      = 0x01,
-    AXIS        = 0x02,
-    INIT        = 0x80,
-    INIT_BUTTON = INIT | BUTTON,
-    INIT_AXIS   = INIT | AXIS,
+    SYNC   = 0x00, // EV_SYN
+    BUTTON = 0x01, // EV_KEY
+    STICK  = 0x03, // EV_ABS
 };
 
-struct JoystickEvent
+struct InputEvent
 {
-    std::uint32_t     time;     /* event timestamp in milliseconds */
-    std::int16_t      value;    /* value */
-    JoystickEventType type;     /* event type */
-    std::uint8_t      buttonID; /* axis/button number */
+    ::timeval     time;
+    std::uint16_t type;
+    std::uint16_t code;
+    std::int32_t  value;
 };
 } // namespace cuuwr::topside::controller

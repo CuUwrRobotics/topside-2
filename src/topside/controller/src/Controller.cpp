@@ -24,6 +24,13 @@
 
 namespace cuuwr::topside::controller
 {
+//! The behaviour of this could change. Right now if a controller isn't
+//! connected, the program exits. The behaviour could be updated to make it so
+//! that if there is no controller connected, an exception is thrown to indicate
+//! that there is no controller and the owner of the object could try again.
+//! This would probably be the preferred behaviour in the event that we for some
+//! reason need to hotswap the controllers or if we forget to plug it in and
+//! want it to just plug it in without having to rerun the program.
 Controller::Controller()
 {
     const auto inputByID = std::filesystem::absolute("/dev/input/by-id");
@@ -74,36 +81,18 @@ Controller::Controller()
     spdlog::info("Found controller with known ID: {}",
                  joystickFile.filename().generic_string());
 
-    spdlog::debug("Attempting to aquire handle to controller");
+    spdlog::debug("Attempting to acquire handle to controller");
     m_ControllerFileDescriptor
         = ::open(joystickFile.c_str(), O_RDONLY | O_NONBLOCK);
 
     // ::open experienced an error
     if (m_ControllerFileDescriptor == -1)
     {
-        spdlog::error("Failed to aquire handle to controller!");
+        spdlog::error("Failed to acquire handle to controller!");
         std::exit(EXIT_FAILURE);
     }
 
     spdlog::info("Successfully acquired handle to controller!");
-}
-
-auto Controller::report_inputs() -> void
-{
-    ::input_event inputEvent;
-
-    while (::read(m_ControllerFileDescriptor, &inputEvent, sizeof(inputEvent)))
-    {
-        if (inputEvent.type != EV_KEY)
-        {
-            continue;
-        }
-
-        spdlog::info(R"({{"type": {}, "code": {}, "value": {}}})",
-                     inputEvent.type,
-                     inputEvent.code,
-                     inputEvent.value);
-    }
 }
 
 Controller::~Controller()

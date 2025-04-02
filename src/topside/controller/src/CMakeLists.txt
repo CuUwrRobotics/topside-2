@@ -1,3 +1,5 @@
+file(GLOB HEADER_LIST CONFIGURE_DEPENDS "../include/*.hpp")
+
 add_executable(controller)
 
 target_sources(controller
@@ -5,6 +7,7 @@ PRIVATE
     main.cpp
     Controller.cpp
     ControllerManager.cpp
+    ${HEADER_LIST}
 )
 
 target_link_libraries(controller

@@ -14,7 +14,7 @@ namespace cuuwr::topside::controller
  * <linux/input-event-codes.h> are incorrect for this controller
  *
  */
-enum class ControllerButtons : std::uint16_t
+enum class ControllerButton : std::uint16_t
 {
     X              = 0x120,
     A              = 0x121,
@@ -26,11 +26,11 @@ enum class ControllerButtons : std::uint16_t
     RIGHT_TRIGGER  = 0x127,
     BACK           = 0x128,
     START          = 0x129,
-    LEFT_JOYSICK   = 0x12A,
+    LEFT_JOYSTICK  = 0x12A,
     RIGHT_JOYSTICK = 0x12B,
 };
 
-enum class ControllerAxes : std::uint16_t
+enum class ControllerAxis : std::uint16_t
 {
     LEFT_JOYSTICK_X  = 0x0,
     LEFT_JOYSTICK_Y  = 0x1,

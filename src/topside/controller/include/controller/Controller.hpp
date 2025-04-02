@@ -5,8 +5,12 @@
  */
 #pragma once
 
+// Project Includes
+#include <controller/ControllerInput.hpp>
+
 namespace cuuwr::topside::controller
 {
+
 class Controller
 {
   public: // Constructors
@@ -20,7 +24,7 @@ class Controller
     ~Controller();
 
   public:  // Methods
-    auto report_inputs() -> void;
+    auto poll_input() -> std::optional<ControllerInput>;
 
   private: // Members
     int m_ControllerFileDescriptor = -1;
