@@ -5,12 +5,14 @@
  */
 #pragma once
 
+// Standard Library Includes
+#include <optional>
+
 // Project Includes
 #include <controller/ControllerInput.hpp>
 
 namespace cuuwr::topside::controller
 {
-
 class Controller
 {
   public: // Constructors
