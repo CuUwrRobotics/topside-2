@@ -5,15 +5,15 @@
 #include <spdlog/cfg/env.h>
 
 // Project Includes
-#include <controller/Controller.hpp>
+#include <controller/ControllerManager.hpp>
 
 auto main() -> int
 {
     spdlog::cfg::load_env_levels();
 
-    cuuwr::topside::controller::Controller controllerManager;
+    cuuwr::topside::controller::ControllerManager controllerManager;
 
-    controllerManager.dump_inputs_to_terminal();
+    controllerManager.run();
 
     return EXIT_SUCCESS;
 }
