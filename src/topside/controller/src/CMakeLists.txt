@@ -19,3 +19,8 @@ target_include_directories(controller
 PRIVATE 
     ../include
 )
+
+target_compile_features(controller
+PRIVATE
+    cxx_std_23
+)

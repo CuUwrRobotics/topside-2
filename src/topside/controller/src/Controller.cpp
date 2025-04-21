@@ -22,6 +22,9 @@
 // Third Party Includes
 #include <spdlog/spdlog.h>
 
+// Project Includes
+#include <controller/Joystick.hpp>
+
 namespace cuuwr::topside::controller
 {
 //! The behaviour of this could change. Right now if a controller isn't
@@ -43,8 +46,8 @@ Controller::Controller()
     //! runtime.
     using namespace std::string_view_literals;
     constexpr std::array<std::string_view, 2> CONTROLLER_IDS
-        = { "usb-Logitech_Logitech_Dual_Action_9AA95248-event-joystick"sv,
-            "usb-Logitech_Logitech_Dual_Action_F240D0A4-event-joystick"sv };
+        = { "usb-Logitech_Logitech_Dual_Action_9AA95248-joystick"sv,
+            "usb-Logitech_Logitech_Dual_Action_F240D0A4-joystick"sv };
 
     // I've been told that this is cursed ¯\_(ツ)_/¯
     // Initializes variable using an immediately invoked lambda expression
@@ -74,7 +77,7 @@ Controller::Controller()
     if (!maybeControllerPath.has_value())
     {
         spdlog::error("No known controllers are connected!");
-        std::exit(EXIT_FAILURE);
+        throw std::runtime_error("No known controllers are connected!");
     }
 
     const auto& joystickFile = maybeControllerPath.value();
@@ -89,7 +92,7 @@ Controller::Controller()
     if (m_ControllerFileDescriptor == -1)
     {
         spdlog::error("Failed to acquire handle to controller!");
-        std::exit(EXIT_FAILURE);
+        throw std::runtime_error("Failed to acquire handle to controller!")
     }
 
     spdlog::info("Successfully acquired handle to controller!");
@@ -104,6 +107,37 @@ Controller::~Controller()
     //! likely not ever going to be needed because the controller object should
     //! only ever be destroyed when the program is almost finished running and
     //! the handle will be reclaimed by the OS automatically anyway
+}
+
+auto Controller::poll_input() -> std::optional<ControllerInput>
+{
+    JoystickEvent event;
+
+    const std::size_t bytesRead
+        = ::read(m_ControllerFileDescriptor, &event, sizeof(event));
+
+    if (bytesRead == -1 || bytesRead < sizeof(event))
+    {
+        spdlog::error("Failed to read joystick event data from controller!");
+        return std::nullopt;
+    }
+
+    switch (event.eventType)
+    {
+    case JoystickEventType::AXIS: [[fallthrough]];
+    case JoystickEventType::AXIS_INIT:
+        return AxisInput { .axis     = static_cast<ControllerAxis>(event.id),
+                           .position = event.value };
+
+    case JoystickEventType::BUTTON: [[fallthrough]];
+    case JoystickEventType::BUTTON_INIT:
+        return ButtonInput { .button = static_cast<ControllerButton>(event.id),
+                             .isPressed = static_cast<bool>(event.value) };
+
+    case JoystickEventType::INIT: break;
+    }
+
+    return std::nullopt;
 }
 } // namespace cuuwr::topside::controller
 

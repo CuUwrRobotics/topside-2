@@ -16,7 +16,7 @@ namespace cuuwr::topside::controller
 struct AxisInput
 {
     ControllerAxis axis;
-    std::int32_t   position;
+    std::int16_t   position;
 };
 
 struct ButtonInput

@@ -12,18 +12,20 @@
 
 namespace cuuwr::topside::controller
 {
-enum class InputEventType : std::uint16_t
+enum class JoystickEventType : std::uint8_t
 {
-    SYNC   = 0x00, // EV_SYN
-    BUTTON = 0x01, // EV_KEY
-    STICK  = 0x03, // EV_ABS
+    BUTTON      = 0x01,
+    AXIS        = 0x02,
+    INIT        = 0x80,
+    BUTTON_INIT = BUTTON | INIT,
+    AXIS_INIT   = BUTTON | AXIS,
 };
 
-struct InputEvent
+struct JoystickEvent
 {
-    ::timeval     time;
-    std::uint16_t type;
-    std::uint16_t code;
-    std::int32_t  value;
+    std::uint32_t  timestamp; // In milliseconds. Since what? idk
+    std::int16_t   value;
+    JoystickEventType eventType;
+    std::uint8_t   id;
 };
 } // namespace cuuwr::topside::controller
