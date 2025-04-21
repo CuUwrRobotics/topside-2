@@ -11,6 +11,7 @@
 #include <stdexcept>
 
 // Third Party Libraries
+#include <spdlog/spdlog.h>
 #include <zmq.hpp>
 
 // Library Includes
@@ -28,6 +29,12 @@ try
 catch (std::runtime_error& re)
 {
     throw re;
+}
+catch (zmq::error_t& zmqe)
+{
+    spdlog::error("Failed to initialize zmq socket context! Error message: {}",
+                  zmqe.what());
+    throw zmqe;
 }
 
 auto ControllerManager::InputVisitor::operator()(const AxisInput& input) -> void
