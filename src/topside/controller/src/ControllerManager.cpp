@@ -22,6 +22,7 @@ try
       m_SocketContext(ControllerManager::IO_THREADS,
                       ControllerManager::MAX_SOCKETS)
 {
+    spdlog::info("Initialized zmq socket context");
 }
 catch (std::runtime_error& re)
 {
