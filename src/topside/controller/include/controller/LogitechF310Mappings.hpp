@@ -24,7 +24,7 @@ enum class ControllerButton : std::uint8_t
     START          = 0x7,
     LOGO_BUTTON    = 0x8,
     LEFT_JOYSTICK  = 0x9,
-    RIGHT_JOYSTICK = 0x10,
+    RIGHT_JOYSTICK = 0xA,
 };
 
 enum class ControllerAxis : std::uint8_t
