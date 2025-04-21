@@ -46,8 +46,8 @@ Controller::Controller()
     //! runtime.
     using namespace std::string_view_literals;
     constexpr std::array<std::string_view, 2> CONTROLLER_IDS
-        = { "usb-Logitech_Logitech_Dual_Action_9AA95248-joystick"sv,
-            "usb-Logitech_Logitech_Dual_Action_F240D0A4-joystick"sv };
+        = { "usb-Logitech_Gamepad_F310_9AA95248-joystick"sv,
+            "usb-Logitech_Gamepad_F310_F240D0A4-joystick"sv };
 
     // I've been told that this is cursed ¯\_(ツ)_/¯
     // Initializes variable using an immediately invoked lambda expression
@@ -85,14 +85,13 @@ Controller::Controller()
                  joystickFile.filename().generic_string());
 
     spdlog::debug("Attempting to acquire handle to controller");
-    m_ControllerFileDescriptor
-        = ::open(joystickFile.c_str(), O_RDONLY | O_NONBLOCK);
+    m_ControllerFileDescriptor = ::open(joystickFile.c_str(), O_RDONLY);
 
     // ::open experienced an error
     if (m_ControllerFileDescriptor == -1)
     {
         spdlog::error("Failed to acquire handle to controller!");
-        throw std::runtime_error("Failed to acquire handle to controller!")
+        throw std::runtime_error("Failed to acquire handle to controller!");
     }
 
     spdlog::info("Successfully acquired handle to controller!");
@@ -124,17 +123,20 @@ auto Controller::poll_input() -> std::optional<ControllerInput>
 
     switch (event.eventType)
     {
-    case JoystickEventType::AXIS: [[fallthrough]];
+    case JoystickEventType::AXIS:
+        [[fallthrough]];
     case JoystickEventType::AXIS_INIT:
         return AxisInput { .axis     = static_cast<ControllerAxis>(event.id),
                            .position = event.value };
 
-    case JoystickEventType::BUTTON: [[fallthrough]];
+    case JoystickEventType::BUTTON:
+        [[fallthrough]];
     case JoystickEventType::BUTTON_INIT:
         return ButtonInput { .button = static_cast<ControllerButton>(event.id),
                              .isPressed = static_cast<bool>(event.value) };
 
-    case JoystickEventType::INIT: break;
+    case JoystickEventType::INIT:
+        break;
     }
 
     return std::nullopt;
