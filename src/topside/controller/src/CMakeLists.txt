@@ -7,7 +7,6 @@ PRIVATE
     main.cpp
     Controller.cpp
     ControllerManager.cpp
-    InputFunctions.cpp
     ${HEADER_LIST}
 )
 

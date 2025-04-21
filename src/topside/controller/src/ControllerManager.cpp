@@ -109,6 +109,112 @@ auto ControllerManager::InputVisitor::operator()(const ButtonInput& input)
     }
 }
 
+auto ControllerManager::ButtonHandlers::a(const bool isPressed) -> void
+{
+    spdlog::trace("A button {}pressed", (isPressed ? "" : "un"));
+}
+
+auto ControllerManager::ButtonHandlers::b(const bool isPressed) -> void
+{
+    spdlog::trace("B button {}pressed", (isPressed ? "" : "un"));
+}
+
+auto ControllerManager::ButtonHandlers::x(const bool isPressed) -> void
+{
+    spdlog::trace("X button {}pressed", (isPressed ? "" : "un"));
+}
+
+auto ControllerManager::ButtonHandlers::y(const bool isPressed) -> void
+{
+    spdlog::trace("Y button {}pressed", (isPressed ? "" : "un"));
+}
+
+auto ControllerManager::ButtonHandlers::left_bumper(const bool isPressed)
+    -> void
+{
+    spdlog::trace("Left bumper {}pressed", (isPressed ? "" : "un"));
+}
+
+auto ControllerManager::ButtonHandlers::right_bumper(const bool isPressed)
+    -> void
+{
+    spdlog::trace("Right bumper {}pressed", (isPressed ? "" : "un"));
+}
+
+auto ControllerManager::ButtonHandlers::back(const bool isPressed) -> void
+{
+    spdlog::trace("Back button {}pressed", (isPressed ? "" : "un"));
+}
+
+auto ControllerManager::ButtonHandlers::start(const bool isPressed) -> void
+{
+    spdlog::trace("Start button {}pressed", (isPressed ? "" : "un"));
+}
+
+auto ControllerManager::ButtonHandlers::logo_button(const bool isPressed)
+    -> void
+{
+    spdlog::trace("Logo button {}pressed", (isPressed ? "" : "un"));
+}
+
+auto ControllerManager::ButtonHandlers::left_joystick(const bool isPressed)
+    -> void
+{
+    spdlog::trace("Left stick {}pressed", (isPressed ? "" : "un"));
+}
+
+auto ControllerManager::ButtonHandlers::right_joystick(const bool isPressed)
+    -> void
+{
+    spdlog::trace("Right stick {}pressed", (isPressed ? "" : "un"));
+}
+
+auto ControllerManager::AxisHandlers::left_joystick_x(const std::int16_t value)
+    -> void
+{
+    spdlog::trace("Left x axis moved");
+}
+
+auto ControllerManager::AxisHandlers::left_joystick_y(const std::int16_t value)
+    -> void
+{
+    spdlog::trace("Left y axis moved");
+}
+
+auto ControllerManager::AxisHandlers::left_trigger(const std::int16_t value)
+    -> void
+{
+    spdlog::trace("Left trigger moved");
+}
+
+auto ControllerManager::AxisHandlers::right_joystick_x(const std::int16_t value)
+    -> void
+{
+    spdlog::trace("Right x axis moved");
+}
+
+auto ControllerManager::AxisHandlers::right_joystick_y(const std::int16_t value)
+    -> void
+{
+    spdlog::trace("Right y axis moved");
+}
+
+auto ControllerManager::AxisHandlers::right_trigger(const std::int16_t value)
+    -> void
+{
+    spdlog::trace("Right trigger moved");
+}
+
+auto ControllerManager::AxisHandlers::d_pad_x(const std::int16_t value) -> void
+{
+    spdlog::trace("D-pad x moved");
+}
+
+auto ControllerManager::AxisHandlers::d_pad_y(const std::int16_t value) -> void
+{
+    spdlog::trace("D-pad y moved");
+}
+
 auto ControllerManager::run() -> void
 {
     while (true)

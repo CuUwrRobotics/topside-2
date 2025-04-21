@@ -32,6 +32,33 @@ class ControllerManager
         auto operator()(const ButtonInput& input) -> void;
     };
 
+    struct ButtonHandlers
+    {
+        static auto a(const bool isPressed) -> void;
+        static auto b(const bool isPressed) -> void;
+        static auto x(const bool isPressed) -> void;
+        static auto y(const bool isPressed) -> void;
+        static auto left_bumper(const bool isPressed) -> void;
+        static auto right_bumper(const bool isPressed) -> void;
+        static auto back(const bool isPressed) -> void;
+        static auto start(const bool isPressed) -> void;
+        static auto logo_button(const bool isPressed) -> void;
+        static auto left_joystick(const bool isPressed) -> void;
+        static auto right_joystick(const bool isPressed) -> void;
+    };
+
+    struct AxisHandlers
+    {
+        static auto left_joystick_x(const std::int16_t value) -> void;
+        static auto left_joystick_y(const std::int16_t value) -> void;
+        static auto left_trigger(const std::int16_t value) -> void;
+        static auto right_joystick_x(const std::int16_t value) -> void;
+        static auto right_joystick_y(const std::int16_t value) -> void;
+        static auto right_trigger(const std::int16_t value) -> void;
+        static auto d_pad_x(const std::int16_t value) -> void;
+        static auto d_pad_y(const std::int16_t value) -> void;
+    };
+
   private: // Static Members
     static inline constexpr int IO_THREADS  = 1;
     static inline constexpr int MAX_SOCKETS = 2;
