@@ -14,9 +14,6 @@
 #include <spdlog/spdlog.h>
 #include <zmq.hpp>
 
-// Library Includes
-#include <controller/InputFunctions.hpp>
-
 namespace cuuwr::topside::controller
 {
 ControllerManager::ControllerManager()
