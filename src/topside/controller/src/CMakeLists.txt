@@ -7,12 +7,14 @@ PRIVATE
     main.cpp
     Controller.cpp
     ControllerManager.cpp
+    InputFunctions.cpp
     ${HEADER_LIST}
 )
 
 target_link_libraries(controller
 PRIVATE
     spdlog::spdlog
+    cppzmq
 )
 
 target_include_directories(controller 
