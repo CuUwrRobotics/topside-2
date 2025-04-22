@@ -4,6 +4,8 @@
  * @brief
  */
 
+#pragma once
+
 // Standard Library Includes
 #include <cstdint>
 

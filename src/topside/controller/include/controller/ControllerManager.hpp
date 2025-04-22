@@ -3,6 +3,7 @@
  * @author Cary Keesler
  * @brief
  */
+
 #pragma once
 
 // Third Party Libraries
@@ -11,6 +12,7 @@
 // Project Includes
 #include <controller/Controller.hpp>
 #include <controller/ControllerInput.hpp>
+#include <controller/StickInterpreter.hpp>
 
 namespace cuuwr::topside::controller
 {
@@ -59,12 +61,24 @@ class ControllerManager
         static auto d_pad_y(const std::int16_t value) -> void;
     };
 
+  private: // Methods
+    static auto publish_event(const std::string&       topic,
+                              const zmq::const_buffer& data) -> void;
+
   private: // Static Members
-    static inline constexpr int IO_THREADS  = 1;
-    static inline constexpr int MAX_SOCKETS = 2;
+    static inline constexpr int  IO_THREADS  = 1;
+    static inline constexpr int  MAX_SOCKETS = 3;
+    static inline zmq::context_t s_SocketContext {
+        ControllerManager::IO_THREADS,
+        ControllerManager::MAX_SOCKETS
+    };
+    static inline zmq::socket_t s_ControllerEventPublisher {
+        s_SocketContext,
+        zmq::socket_type::pub
+    };
+    static inline StickInterpreter s_StickInterpreter;
 
   private: // Members
-    Controller     m_Controller;
-    zmq::context_t m_SocketContext;
+    Controller m_Controller;
 };
 } // namespace cuuwr::topside::controller

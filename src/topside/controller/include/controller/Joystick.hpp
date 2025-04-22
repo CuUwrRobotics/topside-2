@@ -4,8 +4,7 @@
  * @brief
  */
 
-// System Includes
-#include <sys/time.h>
+#pragma once
 
 // Standard Library Includes
 #include <cstdint>
@@ -23,9 +22,9 @@ enum class JoystickEventType : std::uint8_t
 
 struct JoystickEvent
 {
-    std::uint32_t  timestamp; // In milliseconds. Since what? idk
-    std::int16_t   value;
+    std::uint32_t     timestamp; // In milliseconds. Since what? idk
+    std::int16_t      value;
     JoystickEventType eventType;
-    std::uint8_t   id;
+    std::uint8_t      id;
 };
 } // namespace cuuwr::topside::controller

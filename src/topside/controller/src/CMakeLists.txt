@@ -7,6 +7,10 @@ PRIVATE
     main.cpp
     Controller.cpp
     ControllerManager.cpp
+    ControllerManager/AxisHandlers.cpp
+    ControllerManager/ButtonHandlers.cpp
+    ControllerManager/InputVisitor.cpp
+    StickInterpreter.cpp
     ${HEADER_LIST}
 )
 
