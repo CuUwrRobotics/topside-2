@@ -14,6 +14,7 @@ target_link_libraries(controller
 PRIVATE
     spdlog::spdlog
     cppzmq
+    cuuwr_common
 )
 
 target_include_directories(controller 
