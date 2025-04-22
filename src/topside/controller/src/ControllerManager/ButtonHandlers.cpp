@@ -29,6 +29,11 @@ auto ControllerManager::ButtonHandlers::b(const bool isPressed) -> void
 {
     spdlog::trace("B button {}pressed", (isPressed ? "" : "un"));
 
+    if (!isPressed)
+    {
+        return;
+    }
+
     constexpr auto command
         = common::controller_messages::CameraControl::NEXT_CAMERA;
 
@@ -42,6 +47,11 @@ auto ControllerManager::ButtonHandlers::b(const bool isPressed) -> void
 auto ControllerManager::ButtonHandlers::x(const bool isPressed) -> void
 {
     spdlog::trace("X button {}pressed", (isPressed ? "" : "un"));
+
+    if (!isPressed)
+    {
+        return;
+    }
 
     constexpr auto command
         = common::controller_messages::CameraControl::PREVIOUS_CAMERA;
@@ -80,6 +90,11 @@ auto ControllerManager::ButtonHandlers::back(const bool isPressed) -> void
 {
     spdlog::trace("Back button {}pressed", (isPressed ? "" : "un"));
 
+    if (!isPressed)
+    {
+        return;
+    }
+
     constexpr auto command
         = common::controller_messages::MotorDriver::DISARM_MOTORS;
 
@@ -92,6 +107,11 @@ auto ControllerManager::ButtonHandlers::back(const bool isPressed) -> void
 auto ControllerManager::ButtonHandlers::start(const bool isPressed) -> void
 {
     spdlog::trace("Start button {}pressed", (isPressed ? "" : "un"));
+
+    if (!isPressed)
+    {
+        return;
+    }
 
     constexpr auto command
         = common::controller_messages::MotorDriver::ARM_MOTORS;
