@@ -36,7 +36,8 @@ auto unimplemented(const std::string_view     message,
         return;
     }
 
-    spdlog::warn("Function {} [{} line {}] is not yet implemented! {}",
+    spdlog::warn("THIS MESSAGE WILL ONLY DISPLAY ONCE! Function {} [{} line "
+                 "{}] is not yet implemented! {}",
                  location.function_name(),
                  location.file_name(),
                  location.line(),
